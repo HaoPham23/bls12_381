@@ -9,6 +9,7 @@ use group::{
     Curve, Group, GroupEncoding, UncompressedEncoding,
 };
 use rand_core::RngCore;
+use serde::{Serialize, Deserialize};
 use subtle::{Choice, ConditionallySelectable, ConstantTimeEq, CtOption};
 
 #[cfg(feature = "alloc")]
@@ -508,11 +509,24 @@ impl G2Affine {
 
 /// This is an element of $\mathbb{G}_2$ represented in the projective coordinate space.
 #[cfg_attr(docsrs, doc(cfg(feature = "groups")))]
-#[derive(Copy, Clone, Debug)]
+#[derive(Copy, Clone, Debug, Serialize, Deserialize)]
 pub struct G2Projective {
     pub x: Fp2,
     pub y: Fp2,
     pub z: Fp2,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(remote = "Choice")]
+pub struct ChoiceDef {
+    #[serde(getter = "Choice::unwrap_u8")]
+    inner: u8,
+}
+// Provide a conversion to construct the remote type.
+impl From<ChoiceDef> for Choice {
+    fn from(def: ChoiceDef) -> Choice {
+        Choice::from(def.inner)
+    }
 }
 
 impl Default for G2Projective {

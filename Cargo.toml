@@ -75,6 +75,10 @@ default-features = false
 features = ["alloc"]
 optional = true
 
+[dependencies.serde]
+version = "1.0"
+features = ["derive"]
+
 [target.'cfg(target_os = "zkvm")'.dependencies.sp1-lib]
 version = "4.0.0"
 default-features = false

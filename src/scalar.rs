@@ -2,6 +2,7 @@
 //! where `q = 0x73eda753299d7d483339d80809a1d80553bda402fffe5bfeffffffff00000001`
 
 use cfg_if::cfg_if;
+use serde::{Deserialize, Serialize};
 use core::fmt;
 use core::ops::{Add, AddAssign, Mul, MulAssign, Neg, Sub, SubAssign};
 use ff::{Field, PrimeField};
@@ -26,7 +27,7 @@ use crate::util::{adc, mac, sbb};
 // The internal representation of this type is four 64-bit unsigned
 // integers in little-endian order. `Scalar` values are always in
 // Montgomery form; i.e., Scalar(a) = aR mod q, with R = 2^256.
-#[derive(Clone, Copy, Eq)]
+#[derive(Clone, Copy, Eq, Serialize, Deserialize)]
 pub struct Scalar(pub [u64; 4]);
 
 impl fmt::Debug for Scalar {

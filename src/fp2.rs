@@ -3,6 +3,7 @@
 use core::fmt;
 use core::ops::{Add, AddAssign, Mul, MulAssign, Neg, Sub, SubAssign};
 use rand_core::RngCore;
+use serde::{Deserialize, Serialize};
 use subtle::{Choice, ConditionallySelectable, ConstantTimeEq, CtOption};
 
 use crate::fp::Fp;
@@ -18,7 +19,7 @@ use {
     },
 };
 
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Serialize, Deserialize)]
 #[repr(C)] // NOTE: this is technically required for ensuring the memory layout used in the zkvm precompiles is valid
 pub struct Fp2 {
     pub c0: Fp,

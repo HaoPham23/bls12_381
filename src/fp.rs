@@ -4,6 +4,7 @@
 use core::fmt;
 use core::ops::{Add, AddAssign, Mul, MulAssign, Neg, Sub, SubAssign};
 use rand_core::RngCore;
+use serde::{Deserialize, Serialize};
 use subtle::{Choice, ConditionallySelectable, ConstantTimeEq, CtOption};
 
 use crate::util::{adc, mac, sbb};
@@ -20,7 +21,7 @@ use {
 // The internal representation of this type is six 64-bit unsigned
 // integers in little-endian order. `Fp` values are always in
 // Montgomery form; i.e., Scalar(a) = aR mod p, with R = 2^384.
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Serialize, Deserialize)]
 #[repr(transparent)] // NOTE: this is technically required for ensuring the memory layout used in the zkvm precompiles is valid
 pub struct Fp(pub(crate) [u64; 6]);
 

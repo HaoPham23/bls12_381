@@ -85,6 +85,7 @@ dependencies = [
  "pairing",
  "rand_core",
  "rand_xorshift",
+ "serde",
  "sha2",
  "sha3",
  "sp1-lib",

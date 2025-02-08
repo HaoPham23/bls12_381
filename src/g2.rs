@@ -26,11 +26,25 @@ use crate::Scalar;
 /// Values of `G2Affine` are guaranteed to be in the $q$-order subgroup unless an
 /// "unchecked" API was misused.
 #[cfg_attr(docsrs, doc(cfg(feature = "groups")))]
-#[derive(Copy, Clone, Debug)]
+#[derive(Copy, Clone, Debug, Serialize, Deserialize)]
 pub struct G2Affine {
     pub x: Fp2,
     pub y: Fp2,
+    #[serde(with = "ChoiceDef")]
     pub infinity: Choice,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(remote = "Choice")]
+pub struct ChoiceDef {
+    #[serde(getter = "Choice::unwrap_u8")]
+    inner: u8,
+}
+// Provide a conversion to construct the remote type.
+impl From<ChoiceDef> for Choice {
+    fn from(def: ChoiceDef) -> Choice {
+        Choice::from(def.inner)
+    }
 }
 
 impl Default for G2Affine {
@@ -509,24 +523,11 @@ impl G2Affine {
 
 /// This is an element of $\mathbb{G}_2$ represented in the projective coordinate space.
 #[cfg_attr(docsrs, doc(cfg(feature = "groups")))]
-#[derive(Copy, Clone, Debug, Serialize, Deserialize)]
+#[derive(Copy, Clone, Debug)]
 pub struct G2Projective {
     pub x: Fp2,
     pub y: Fp2,
     pub z: Fp2,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-#[serde(remote = "Choice")]
-pub struct ChoiceDef {
-    #[serde(getter = "Choice::unwrap_u8")]
-    inner: u8,
-}
-// Provide a conversion to construct the remote type.
-impl From<ChoiceDef> for Choice {
-    fn from(def: ChoiceDef) -> Choice {
-        Choice::from(def.inner)
-    }
 }
 
 impl Default for G2Projective {
